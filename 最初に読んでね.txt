@@ -1,0 +1,23 @@
+[前提条件]
+・自身のPC端末に、Node.jsがインストールされていること
+・npmコマンドが使用できること
+・Dockerを使用する場合は、Docker Desktop for Windowsがダウンロード済みであること
+
+
+Express起動までの手順(Dockerを使わない場合)
+===========================================
+1. cd express-docker/express-app/
+2. npm install
+3. npm run dev
+※以降、ターミナルログに、起動ログが流れる
+===========================================
+
+
+
+Express起動までの手順(Dockerを使う場合)
+===========================================
+1. cd express-docker/express-app/
+2. npm install
+3. docker-compose up
+※以降、ターミナルログに、起動ログが流れる
+===========================================
