@@ -1,8 +1,26 @@
 version: '3'
 services:
+
+  db:
+    # 起動イメージ
+    image: mysql:8.0
+    # 起動時のコンテナ名の明示
+    container_name: mysql
+    # 起動時にコンテナが読み込む環境変数がまとめられたenvファイル
+    env_file: ./mysql/mysql.env
+    # ホスト側のポート：コンテナのポート
+    ports:
+      - '3306:3306'
+    # ホスト側のmysqlをコンテナのdbにマウント
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/sql:/docker-entrypoint-initdb.d
+
   app:
     # 起動イメージ
     image: node:16.15.0
+    # 起動時のコンテナ名の明示
+    container_name: express
     # 環境変数
     environment:
       - DEBUG=app:*
@@ -17,3 +35,6 @@ services:
     working_dir: /app
     # 起動後に実行するコマンド
     command: bash -c 'npm run build; npm run dev'
+    # MySQLコンテナとの依存関係
+    depends_on:
+      - db
