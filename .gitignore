@@ -1,3 +1,8 @@
-dist/
+.idea/
+.vscode/
 node_modules/
+build/
+tmp/
+temp/
+app.env
 mysql/

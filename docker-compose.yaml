@@ -7,20 +7,22 @@ services:
     # 起動時のコンテナ名の明示
     container_name: mysql
     # 起動時にコンテナが読み込む環境変数がまとめられたenvファイル
-    env_file: ./mysql/mysql.env
+    env_file: ./express-app/mysql/mysql.env
     # ホスト側のポート：コンテナのポート
     ports:
       - '3306:3306'
     # ホスト側のmysqlをコンテナのdbにマウント
     volumes:
-      - ./mysql/data:/var/lib/mysql
-      - ./mysql/sql:/docker-entrypoint-initdb.d
+      - ./express-app/mysql/data:/var/lib/mysql
+      - ./express-app/mysql/sql:/docker-entrypoint-initdb.d
 
   app:
     # 起動イメージ
     image: node:16.15.0
     # 起動時のコンテナ名の明示
     container_name: express
+    # 起動時にコンテナが読み込む環境変数がまとめられたenvファイル
+    env_file: ./express-app/src/config/app.env
     # 環境変数
     environment:
       - DEBUG=app:*
