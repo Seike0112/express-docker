@@ -3,19 +3,18 @@ services:
 
   db:
     # 起動イメージ
-    image: mysql:8.0
+    image: mysql:5.7
     # 起動時のコンテナ名の明示
     container_name: mysql
-    # 起動時にコンテナが読み込む環境変数(個人で作成した、/express-app/mysql/mysql.envを参照)
-    environment:
-      - MYSQL_DATABASE: ${DATABASE}
-      - MYSQL_USER: ${USERNAME}
-      - MYSQL_PASSWORD: ${USERPASS}
-      - MYSQL_ROOT_PASSWORD: ${ROOTPASS}
-      - TZ: Asia/Tokyo
+    # 起動時にコンテナが読み込む環境変数(個人で作成した、/express-app/mysql/.envを参照)
+    env_file:
+      - ./express-app/mysql/mysql.env
     # ホスト側のポート：コンテナのポート
     ports:
       - '3306:3306'
+    # 内部ネットワーク設定　必要ないが一応記載
+    networks:
+      - default
     # ホスト側のmysqlをコンテナのdbにマウント
     volumes:
       - ./express-app/mysql/data:/var/lib/mysql
@@ -26,27 +25,26 @@ services:
     image: node:16.15.0
     # 起動時のコンテナ名の明示
     container_name: express
-    # 起動時にコンテナが読み込む環境変数がまとめられたenvファイル
-    env_file: ./express-app/src/config/app.env
-    # 環境変数
-    environment:
-      - DEBUG=app:*
-      - MYSQL_DATABASE: ${DATABASE}
-      - MYSQL_USER: ${USERNAME}
-      - MYSQL_PASSWORD: ${USERPASS}
-      - MYSQL_ROOT_PASSWORD: ${ROOTPASS}
-      - TZ: Asia/Tokyo
+    # 起動時にコンテナが読み込む環境変数(個人で作成した、/express-app/src/config/.envを参照)
+    env_file:
+      - ./express-app/src/config/app.env
     tty: true
     # ホスト側のポート：コンテナのポート
     ports:
       - '3000:3000'
+    # 内部ネットワーク設定　必要ないが一応記載
+    networks:
+      - default
     # ホスト側のsrcをコンテナのappにマウント
     volumes:
       - ./express-app:/app
     # 起動時のカレントフォルダ
     working_dir: /app
     # 起動後に実行するコマンド
-    command: bash -c 'npm run build; npm run dev'
+    command: bash -c 'npm install; npm run dev'
     # MySQLコンテナとの依存関係
     depends_on:
       - db
+
+networks:
+  default:

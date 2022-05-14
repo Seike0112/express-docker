@@ -1,44 +1,37 @@
-import * as express from "express"
-import * as bodyParser from "body-parser"
-import { Request, Response } from "express"
-import { AppDataSource } from "./config/data-source"
-import { Routes } from "./routes"
+import express, { Application, Request, Response } from "express"
 import { User } from "./entity/User"
+import { AppDataSource } from "./config/data-source"
 
-AppDataSource.initialize().then(async () => {
-
-  // create express app
-  const app = express()
-  app.use(bodyParser.json())
-
-  // register express routes from defined application routes
-  Routes.forEach(route => {
-    (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
-      const result = (new (route.controller as any))[route.action](req, res, next)
-      if (result instanceof Promise) {
-        result.then(result => result !== null && result !== undefined ? res.send(result) : undefined)
-
-      } else if (result !== null && result !== undefined) {
-        res.json(result)
-      }
-    })
+// MySQLコンテナへ接続
+AppDataSource.initialize()
+  .then(() => {
+    console.log("DB接続と初期化が完了しました！")
+  })
+  .catch((err) => {
+    console.error("DB接続と初期化に失敗しました。\n" + "エラー内容：", err)
+    console.log("AppDataSource", AppDataSource)
   })
 
-  // setup express app here
-  // ...
+const app: Application = express()
+const PORT: string = process.env.PORT
 
-  // start express server
-  app.listen(3000)
 
-  // insert new users for test
-  await AppDataSource.manager.save(
-    AppDataSource.manager.create(User, {
-      firstName: "Timber",
-      lastName: "Saw",
-      age: 27
-    })
-  )
 
-  console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results")
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
-}).catch(error => console.log(error))
+app.get('/', async (_req: Request, res: Response) => {
+  return res.status(200).send({
+    message: 'Hello World!',
+  })
+})
+
+try {
+  app.listen(PORT, () => {
+    console.log(`起動したよ～ん: http://localhost:${PORT}/`)
+  })
+} catch (e) {
+  if (e instanceof Error) {
+    console.error(e.message)
+  }
+}
