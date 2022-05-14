@@ -12,6 +12,7 @@ services:
       - MYSQL_USER: ${USERNAME}
       - MYSQL_PASSWORD: ${USERPASS}
       - MYSQL_ROOT_PASSWORD: ${ROOTPASS}
+      - TZ: Asia/Tokyo
     # ホスト側のポート：コンテナのポート
     ports:
       - '3306:3306'
@@ -34,6 +35,7 @@ services:
       - MYSQL_USER: ${USERNAME}
       - MYSQL_PASSWORD: ${USERPASS}
       - MYSQL_ROOT_PASSWORD: ${ROOTPASS}
+      - TZ: Asia/Tokyo
     tty: true
     # ホスト側のポート：コンテナのポート
     ports:
