@@ -6,8 +6,12 @@ services:
     image: mysql:8.0
     # 起動時のコンテナ名の明示
     container_name: mysql
-    # 起動時にコンテナが読み込む環境変数がまとめられたenvファイル
-    env_file: ./express-app/mysql/mysql.env
+    # 起動時にコンテナが読み込む環境変数(個人で作成した、/express-app/mysql/mysql.envを参照)
+    environment:
+      - MYSQL_DATABASE: ${DATABASE}
+      - MYSQL_USER: ${USERNAME}
+      - MYSQL_PASSWORD: ${USERPASS}
+      - MYSQL_ROOT_PASSWORD: ${ROOTPASS}
     # ホスト側のポート：コンテナのポート
     ports:
       - '3306:3306'
@@ -26,6 +30,10 @@ services:
     # 環境変数
     environment:
       - DEBUG=app:*
+      - MYSQL_DATABASE: ${DATABASE}
+      - MYSQL_USER: ${USERNAME}
+      - MYSQL_PASSWORD: ${USERPASS}
+      - MYSQL_ROOT_PASSWORD: ${ROOTPASS}
     tty: true
     # ホスト側のポート：コンテナのポート
     ports:
