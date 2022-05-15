@@ -5,10 +5,10 @@ import { AppDataSource } from "./config/data-source"
 // MySQLコンテナへ接続
 AppDataSource.initialize()
   .then(() => {
-    console.log("DB接続と初期化が完了しました！")
+    console.log("【起動log】DB接続と初期化が完了しました！")
   })
   .catch((err) => {
-    console.error("DB接続と初期化に失敗しました。\n" + "エラー内容：", err)
+    console.error("【起動log】DB接続と初期化に失敗しました。\n" + "エラー内容：", err)
     console.log("AppDataSource", AppDataSource)
   })
 
