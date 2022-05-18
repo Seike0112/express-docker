@@ -5,10 +5,10 @@ import { AppDataSource } from "./config/data-source"
 // MySQLコンテナへ接続
 AppDataSource.initialize()
   .then(() => {
-    console.log("【起動log】DB接続と初期化が完了しました！")
+    console.log("From /src/index.ts：　【起動log】DB接続と初期化が完了しました！")
   })
   .catch((err) => {
-    console.error("【起動log】DB接続と初期化に失敗しました。\n" + "エラー内容：", err)
+    console.error("From /src/index.ts：　【起動log】DB接続と初期化に失敗しました。\n" + "エラー内容：", err)
     console.log("AppDataSource", AppDataSource)
   })
 
@@ -22,16 +22,16 @@ app.use(express.urlencoded({ extended: true }))
 
 app.get('/', async (_req: Request, res: Response) => {
   return res.status(200).send({
-    message: 'Hello World!',
+    message: 'Hello World!!!!',
   })
 })
 
 try {
   app.listen(PORT, () => {
-    console.log(`起動したよ～ん: http://localhost:${PORT}/`)
+    console.log(`From /src/index.ts：　【起動log】起動したよ～ん: http://localhost:${PORT}/`)
   })
 } catch (e) {
   if (e instanceof Error) {
-    console.error(e.message)
+    console.error("From /src/index.ts：　【起動log】" + e.message)
   }
 }
