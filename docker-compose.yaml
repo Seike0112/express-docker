@@ -8,7 +8,7 @@ services:
     container_name: mysql
     # 起動時にコンテナが読み込む環境変数(個人で作成した、/express-app/mysql/.envを参照)
     env_file:
-      - ./express-app/mysql/mysql.env
+      - ./express-app/app.env
     # ホスト側のポート：コンテナのポート
     ports:
       - '3306:3306'
@@ -27,7 +27,7 @@ services:
     container_name: express
     # 起動時にコンテナが読み込む環境変数(個人で作成した、/express-app/src/config/.envを参照)
     env_file:
-      - ./express-app/src/config/app.env
+      - ./express-app/app.env
     tty: true
     # ホスト側のポート：コンテナのポート
     ports:
