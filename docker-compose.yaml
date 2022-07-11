@@ -8,7 +8,7 @@ services:
     container_name: mysql
     # 起動時にコンテナが読み込む環境変数(個人で作成した、/express-app/mysql/.envを参照)
     env_file:
-      - ./express-app/app.env
+      - ./attendance-express-app/app.env
     # ホスト側のポート：コンテナのポート
     ports:
       - '3306:3306'
@@ -17,17 +17,17 @@ services:
       - default
     # ホスト側のmysqlをコンテナのdbにマウント
     volumes:
-      - ./express-app/mysql/data:/var/lib/mysql
-      - ./express-app/mysql/sql:/docker-entrypoint-initdb.d
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/sql:/docker-entrypoint-initdb.d
 
-  app:
+  attendance_app:
     # 起動イメージ
     image: node:16.15.0
     # 起動時のコンテナ名の明示
-    container_name: express
-    # 起動時にコンテナが読み込む環境変数(個人で作成した、/express-app/src/config/.envを参照)
+    container_name: attendance_app
+    # 起動時にコンテナが読み込む環境変数
     env_file:
-      - ./express-app/app.env
+      - ./attendance-express-app/app.env
     tty: true
     # ホスト側のポート：コンテナのポート
     ports:
@@ -37,7 +37,33 @@ services:
       - default
     # ホスト側のsrcをコンテナのappにマウント
     volumes:
-      - ./express-app:/app
+      - ./attendance-express-app:/app
+    # 起動時のカレントフォルダ
+    working_dir: /app
+    # 起動後に実行するコマンド
+    command: bash -c 'npm install; npm run dev'
+    # MySQLコンテナとの依存関係
+    depends_on:
+      - db
+
+  schedule_app:
+    # 起動イメージ
+    image: node:16.15.0
+    # 起動時のコンテナ名の明示
+    container_name: schedule_app
+    # 起動時にコンテナが読み込む環境変数(個人で作成した、/express-app/src/config/.envを参照)
+    env_file:
+      - ./schedule-express-app/app.env
+    tty: true
+    # ホスト側のポート：コンテナのポート
+    ports:
+      - '3001:3001'
+    # 内部ネットワーク設定　必要ないが一応記載
+    networks:
+      - default
+    # ホスト側のsrcをコンテナのappにマウント
+    volumes:
+      - ./schedule-express-app:/app
     # 起動時のカレントフォルダ
     working_dir: /app
     # 起動後に実行するコマンド
