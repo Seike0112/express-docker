@@ -72,5 +72,31 @@ services:
     depends_on:
       - db
 
+  prisma_app:
+    # 起動イメージ
+    image: node:16.15.0
+    # 起動時のコンテナ名の明示
+    container_name: prisma_app
+    # 起動時にコンテナが読み込む環境変数(個人で作成した、/express-app/src/config/.envを参照)
+    env_file:
+      - ./schedule-express-app/app.env
+    tty: true
+    # ホスト側のポート：コンテナのポート
+    ports:
+      - '5555:5555'
+    # 内部ネットワーク設定　必要ないが一応記載
+    networks:
+      - default
+    # ホスト側のsrcをコンテナのappにマウント
+    volumes:
+      - ./schedule-express-app:/app
+    # 起動時のカレントフォルダ
+    working_dir: /app
+    # 起動後に実行するコマンド
+    command: bash -c 'npm run prisma studio'
+    # MySQLコンテナとの依存関係
+    depends_on:
+      - db
+
 networks:
   default:

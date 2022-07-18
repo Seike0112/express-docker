@@ -22,3 +22,11 @@ Express起動までの手順(Dockerを使う場合)
 3. docker-compose up
 ※以降、ターミナルログに、起動ログが流れる
 ===========================================
+
+
+
+
+ORM Prismaの使い方
+============================================
+1. prisma/schema.prismaでスキーマ変更
+2. npx prisma migrate dev --create-only [migration file name]
